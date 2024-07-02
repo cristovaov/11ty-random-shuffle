@@ -9,6 +9,11 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.addFilter("inspect", debug.inspect);
 	eleventyConfig.addFilter("keys", debug.keys);
 
+	// Sample collection.
+	eleventyConfig.addCollection("posts", function (collectionApi) {
+		return collectionApi.getFilteredByGlob("./src/posts/*.md");
+	});
+
 	return {
 		dir: {
 			input: "src",
