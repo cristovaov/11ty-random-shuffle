@@ -1,0 +1,91 @@
+---
+items:
+  - item 1
+  - item 2
+  - item 3
+  - item 4
+  - item 5
+  - item 6
+  - item 7
+  - item 8
+  - item 9
+  - item 10
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>11ty-random-shuffle</title>
+</head>
+<body>
+  <h1>
+    11ty-random-shuffle
+  </h1>
+  <h2>Array from front matter data</h2>
+  <p>unfiltered</p>
+  <ul>
+  {% for item in items %}
+    <li>{{ item }}</li>
+  {% endfor %}
+  </ul>
+  <p>filtered</p>
+  <ul>
+  {% for item in items | shuffle %}
+    <li>{{ item }}</li>
+  {% endfor %}
+  </ul>
+  <h2>Array from posts collection</h2>
+  <p>unfiltered</p>
+  <ul>
+  {% for item in collections.posts %}
+    <li>{{ item.data.title }}</li>
+  {% endfor %}
+  </ul>
+  <p>filtered</p>
+  <ul>
+  {% for item in collections.posts | shuffle %}
+    <li>{{ item.data.title }}</li>
+  {% endfor %}
+  </ul>
+  <h2>With JS client side</h2>
+  <button onclick="updateList()">Shuffle</button>
+  <ul class="js-shuffle">
+  {% for item in items %}
+    <li>{{ item }}</li>
+  {% endfor %}
+  </ul>
+  <script>
+    function shuffle(array) {
+      const copiedArray = [...array];
+
+      // Loop through the array starting from the last element and moving backwards.
+      for (let index = copiedArray.length - 1; index > 0; index--) {
+        // Generate a random index from 0 to currentIndex (inclusive)
+        const randomIndex = Math.floor(Math.random() * (index + 1));
+
+        // Swap the elements at currentIndex and randomIndex
+        const temp = copiedArray[index];
+        copiedArray[index] = copiedArray[randomIndex];
+        copiedArray[randomIndex] = temp;
+      }
+
+      return copiedArray;
+    }
+
+    function updateList() {
+      const items = document.querySelectorAll(".js-shuffle > li");
+      const list = document.querySelector(".js-shuffle");
+      list.innerHTML = "";
+
+      const shuffledArray = shuffle(items);
+      shuffledArray.forEach(item => {
+        const listItem = document.createElement('li');
+        listItem.textContent = item.textContent;
+        list.appendChild(listItem);
+      });
+    }
+
+  </script>
+</body>
+</html>
